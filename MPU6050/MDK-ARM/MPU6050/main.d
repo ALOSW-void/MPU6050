@@ -35,5 +35,5 @@ mpu6050\main.o: ../Core/Inc/dma.h
 mpu6050\main.o: ../Core/Inc/i2c.h
 mpu6050\main.o: ../Core/Inc/usart.h
 mpu6050\main.o: ../Core/Inc/gpio.h
-mpu6050\main.o: .\MPU6050\MPU6050.h
+mpu6050\main.o: ./MPU6050/MPU6050.h
 mpu6050\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h

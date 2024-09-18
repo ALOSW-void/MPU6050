@@ -39,6 +39,7 @@ int fgetc(FILE *f)
 	HAL_UART_Receive( &huart1,(uint8_t*)&ch,1, HAL_MAX_DELAY );
 	return ch;
 }
+
 void SystemClock_Config(void);
 
 /**
@@ -48,27 +49,10 @@ void SystemClock_Config(void);
 int main(void)
 {
 
-  /* USER CODE BEGIN 1 */
-
-  /* USER CODE END 1 */
-
-  /* MCU Configuration--------------------------------------------------------*/
-
-  /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
   HAL_Init();
 
-  /* USER CODE BEGIN Init */
-
-  /* USER CODE END Init */
-
-  /* Configure the system clock */
   SystemClock_Config();
 
-  /* USER CODE BEGIN SysInit */
-
-  /* USER CODE END SysInit */
-
-  /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_DMA_Init();
   MX_I2C1_Init();
@@ -77,20 +61,6 @@ int main(void)
   //读取数据通过串口传给电脑
 	int acc_x,acc_y,acc_z,temp,gy_x,gy_y,gy_z;
 
-//	for(uint8_t i=0;i<255;i++)
-//  {
-//    if(HAL_I2C_IsDeviceReady(&hi2c,i,1,1000)==HAL_OK)
-//    {
-//       printf("%d\n",i);
-//       break;
-//    }
-//  }
-  /* USER CODE BEGIN 2 */
-
-  /* USER CODE END 2 */
-
-  /* Infinite loop */
-  /* USER CODE BEGIN WHILE */
   while (1)
   {
 		acc_x=mpu_acc_x();
@@ -102,6 +72,7 @@ int main(void)
 		gy_z=mpu_gy_z();
 		
 		printf("%d,%d,%d,%d,%d,%d\n",acc_x,acc_y,acc_z,temp,gy_x,gy_y,gy_z);
+		
 		HAL_Delay(1000);
   }
   /* USER CODE END 3 */
