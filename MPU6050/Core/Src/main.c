@@ -22,43 +22,24 @@
 #include "i2c.h"
 #include "usart.h"
 #include "gpio.h"
+#include "MPU6050.h"
+#include <stdio.h>// 包含标准输入输出头文件
 
-/* Private includes ----------------------------------------------------------*/
-/* USER CODE BEGIN Includes */
 
-/* USER CODE END Includes */
-
-/* Private typedef -----------------------------------------------------------*/
-/* USER CODE BEGIN PTD */
-
-/* USER CODE END PTD */
-
-/* Private define ------------------------------------------------------------*/
-/* USER CODE BEGIN PD */
-
-/* USER CODE END PD */
-
-/* Private macro -------------------------------------------------------------*/
-/* USER CODE BEGIN PM */
-
-/* USER CODE END PM */
-
-/* Private variables ---------------------------------------------------------*/
-
-/* USER CODE BEGIN PV */
-
-/* USER CODE END PV */
-
-/* Private function prototypes -----------------------------------------------*/
+int fputc(int ch,FILE *f)
+{
+//采用轮询方式发送1字节数据，超时时间设置为无限等待
+	HAL_UART_Transmit(&huart1,(uint8_t *)&ch,1,HAL_MAX_DELAY);
+	return ch;
+}
+int fgetc(FILE *f)
+{
+	uint8_t ch;
+// 采用轮询方式接收 1字节数据，超时时间设置为无限等待
+	HAL_UART_Receive( &huart1,(uint8_t*)&ch,1, HAL_MAX_DELAY );
+	return ch;
+}
 void SystemClock_Config(void);
-/* USER CODE BEGIN PFP */
-
-/* USER CODE END PFP */
-
-/* Private user code ---------------------------------------------------------*/
-/* USER CODE BEGIN 0 */
-
-/* USER CODE END 0 */
 
 /**
   * @brief  The application entry point.
@@ -92,6 +73,18 @@ int main(void)
   MX_DMA_Init();
   MX_I2C1_Init();
   MX_USART1_UART_Init();
+	mpu_begin();
+  //读取数据通过串口传给电脑
+	int acc_x,acc_y,acc_z,temp,gy_x,gy_y,gy_z;
+
+//	for(uint8_t i=0;i<255;i++)
+//  {
+//    if(HAL_I2C_IsDeviceReady(&hi2c,i,1,1000)==HAL_OK)
+//    {
+//       printf("%d\n",i);
+//       break;
+//    }
+//  }
   /* USER CODE BEGIN 2 */
 
   /* USER CODE END 2 */
@@ -100,9 +93,16 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-    /* USER CODE END WHILE */
-
-    /* USER CODE BEGIN 3 */
+		acc_x=mpu_acc_x();
+		acc_y=mpu_acc_y();
+		acc_z=mpu_acc_z();
+		temp=mpu_temp();
+		gy_x=mpu_gy_x();
+		gy_y=mpu_gy_y();
+		gy_z=mpu_gy_z();
+		
+		printf("%d,%d,%d,%d,%d,%d\n",acc_x,acc_y,acc_z,temp,gy_x,gy_y,gy_z);
+		HAL_Delay(1000);
   }
   /* USER CODE END 3 */
 }
