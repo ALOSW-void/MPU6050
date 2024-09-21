@@ -70,10 +70,9 @@ int main(void)
 		gy_x=mpu_gy_x();
 		gy_y=mpu_gy_y();
 		gy_z=mpu_gy_z();
-		
-		printf("%d,%d,%d,%d,%d,%d\n",acc_x,acc_y,acc_z,temp,gy_x,gy_y,gy_z);
-		
+		HAL_GPIO_TogglePin(GPIOA,15);
 		HAL_Delay(1000);
+		printf("%d,%d,%d,%d,%d,%d,%d\n",acc_x,acc_y,acc_z,temp,gy_x,gy_y,gy_z);
   }
   /* USER CODE END 3 */
 }
