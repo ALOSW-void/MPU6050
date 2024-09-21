@@ -57,22 +57,16 @@ int main(void)
   MX_DMA_Init();
   MX_I2C1_Init();
   MX_USART1_UART_Init();
-	mpu_begin();
-  //读取数据通过串口传给电脑
-	int acc_x,acc_y,acc_z,temp,gy_x,gy_y,gy_z;
-
+	//在此处可以向上位机发送一行初始化字符
+	int ret=0;//伪死循环，保证MPU6050初始化通过
+	do{
+		ret=MPU6050_DMP_init();
+	}while(ret);
+	float roll,yaw,pitch;
   while (1)
   {
-		acc_x=mpu_acc_x();
-		acc_y=mpu_acc_y();
-		acc_z=mpu_acc_z();
-		temp=mpu_temp();
-		gy_x=mpu_gy_x();
-		gy_y=mpu_gy_y();
-		gy_z=mpu_gy_z();
-		HAL_GPIO_TogglePin(GPIOA,15);
-		HAL_Delay(1000);
-		printf("%d,%d,%d,%d,%d,%d,%d\n",acc_x,acc_y,acc_z,temp,gy_x,gy_y,gy_z);
+		MPU6050_DMP_Get_Date(&pitch, &roll, &yaw);
+		//向上位机发送浮点数
   }
   /* USER CODE END 3 */
 }
